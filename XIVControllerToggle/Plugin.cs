@@ -151,7 +151,7 @@ namespace XIVControllerToggle {
                 }
             } else {
                 // Our deadzone modifier is 25
-                if (max >= 25) {
+                if (max >= Configuration.StickDeadzone) {
                     swap = true;
                 }
             }
