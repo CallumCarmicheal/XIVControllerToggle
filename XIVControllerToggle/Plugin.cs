@@ -88,15 +88,15 @@ namespace XIVControllerToggle {
                 });
 
                 CommandManager.AddHandler("/controller", new CommandInfo(CmdSetController) {
-                    HelpMessage = "Open settings for MK Controller Switcher"
+                    HelpMessage = "Change hud mode to controller"
                 });
 
                 CommandManager.AddHandler("/kbm", new CommandInfo(CmdSetMouse) {
-                    HelpMessage = "Open settings for MK Controller Switcher"
+                    HelpMessage = "Change hud mode to keyboard / mouse"
                 });
 
                 CommandManager.AddHandler("/togglecontroller", new CommandInfo(CmdToggleController) {
-                    HelpMessage = "Open settings for MK Controller Switcher"
+                    HelpMessage = "Toggle hud mode between controller and kb/m"
                 });
             } else {
                 CommandManager.RemoveHandler(CommandName);
