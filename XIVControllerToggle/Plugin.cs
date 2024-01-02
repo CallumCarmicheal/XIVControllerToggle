@@ -1,15 +1,13 @@
-﻿using Dalamud.Game.Command;
+using Dalamud.Game.Command;
 using Dalamud.IoC;
 using Dalamud.Plugin;
 using System.IO;
 using Dalamud.Interface.Windowing;
 using Dalamud.Plugin.Services;
-using SamplePlugin.Windows;
+using XIVControllerToggle.Windows;
 
-namespace SamplePlugin
-{
-    public sealed class Plugin : IDalamudPlugin
-    {
+namespace XIVControllerToggle {
+    public sealed class Plugin : IDalamudPlugin {
         public string Name => "Sample Plugin";
         private const string CommandName = "/pmycommand";
 
@@ -23,8 +21,7 @@ namespace SamplePlugin
 
         public Plugin(
             [RequiredVersion("1.0")] DalamudPluginInterface pluginInterface,
-            [RequiredVersion("1.0")] ICommandManager commandManager)
-        {
+            [RequiredVersion("1.0")] ICommandManager commandManager) {
             this.PluginInterface = pluginInterface;
             this.CommandManager = commandManager;
 
@@ -37,42 +34,40 @@ namespace SamplePlugin
 
             ConfigWindow = new ConfigWindow(this);
             MainWindow = new MainWindow(this, goatImage);
-            
+
             WindowSystem.AddWindow(ConfigWindow);
             WindowSystem.AddWindow(MainWindow);
 
-            this.CommandManager.AddHandler(CommandName, new CommandInfo(OnCommand)
-            {
+            this.CommandManager.AddHandler(CommandName, new CommandInfo(OnCommand) {
                 HelpMessage = "A useful message to display in /xlhelp"
             });
 
             this.PluginInterface.UiBuilder.Draw += DrawUI;
             this.PluginInterface.UiBuilder.OpenConfigUi += DrawConfigUI;
+
+
+
         }
 
-        public void Dispose()
-        {
+        public void Dispose() {
             this.WindowSystem.RemoveAllWindows();
-            
+
             ConfigWindow.Dispose();
             MainWindow.Dispose();
-            
+
             this.CommandManager.RemoveHandler(CommandName);
         }
 
-        private void OnCommand(string command, string args)
-        {
+        private void OnCommand(string command, string args) {
             // in response to the slash command, just display our main ui
             MainWindow.IsOpen = true;
         }
 
-        private void DrawUI()
-        {
+        private void DrawUI() {
             this.WindowSystem.Draw();
         }
 
-        public void DrawConfigUI()
-        {
+        public void DrawConfigUI() {
             ConfigWindow.IsOpen = true;
         }
     }
