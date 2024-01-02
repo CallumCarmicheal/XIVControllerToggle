@@ -1,13 +1,13 @@
 {
-  "Author": "your name here",
-  "Name": "Sample Plugin",
-  "Punchline": "A short one-liner that shows up in /xlplugins.",
-  "Description": "A description that shows up in /xlplugins. List any major slash-command(s).",
-  "InternalName": "samplePlugin",
-  "ApplicableVersion": "any",
-  "Tags": [
-    "sample",
-    "plugin",
-    "goats"
-  ]
+    "Author": "Callum Carmicheal",
+    "Name": "The Great Controller Hud Switcher",
+    "Punchline": "Toggle controller / mouse mode automatically or with /controller | /mouse | /togglemkcontroller",
+    "Description": "/controllerhudcfg | A simple tool to automatically switch between keyboard and controller hud's when pressing WASD or moving the left joystick. You can setup a macro to add the actions to your hotbat with the commands: /controller, /kbm, /togglecontroller",
+    "InternalName": "XIVControllerToggle",
+    "ApplicableVersion": "any",
+    "Tags": [
+        "controller",
+        "keyboard",
+        "hud"
+    ]
 }
