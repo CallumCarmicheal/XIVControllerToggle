@@ -25,9 +25,10 @@ public class DebugWindow : Window, IDisposable {
     private Plugin plugin;
 
     public DebugWindow(Plugin plugin) : base(
-        "KB/Controller Debug Information", ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoScrollWithMouse) {
+        "KB/Controller Debug Information", ImGuiWindowFlags.NoScrollbar 
+            | ImGuiWindowFlags.NoScrollWithMouse | ImGuiWindowFlags.AlwaysAutoResize) {
         this.SizeConstraints = new WindowSizeConstraints {
-            MinimumSize = new Vector2(375, 330),
+            MinimumSize = new Vector2(400, 350),
             MaximumSize = new Vector2(float.MaxValue, float.MaxValue)
         };
 
@@ -35,7 +36,7 @@ public class DebugWindow : Window, IDisposable {
     }
 
     public void Dispose() {
-        
+        // 
     }
 
     public override void Draw() {

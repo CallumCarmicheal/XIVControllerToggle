@@ -70,10 +70,6 @@ namespace XIVControllerToggle {
 
             setupAndRemoveCommands(true);
 
-            CommandManager.AddHandler(CommandName, new CommandInfo(CmdOpenSettings) {
-                HelpMessage = "Open settings for MK Controller Switcher"
-            });
-
             Framework.Update += Update;
             PluginInterface.UiBuilder.Draw += DrawUI;
             PluginInterface.UiBuilder.OpenConfigUi += DrawConfigUI;

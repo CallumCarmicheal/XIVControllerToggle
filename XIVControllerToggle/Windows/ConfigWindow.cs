@@ -12,16 +12,19 @@ public class ConfigWindow : Window, IDisposable {
     private readonly Plugin plugin;
 
     public ConfigWindow(Plugin plugin) : base(
-        "The Great Controller Hud Switcher", ImGuiWindowFlags.NoResize) {
-        this.Size = new Vector2(400, 310); // 280
+        "The Great Controller Hud Switcher", ImGuiWindowFlags.AlwaysAutoResize) {
+        
         this.SizeCondition = ImGuiCond.Always;
+        this.SizeConstraints = new WindowSizeConstraints {
+            MinimumSize = new Vector2(420, 340),
+            MaximumSize = new Vector2(800, 800)
+        };
 
         this.plugin = plugin;
         this.cfg = plugin.Configuration;
     }
 
     public void Dispose() { }
-
 
     public override void Draw() {
         ImguiCheckbox("Enable KB / Controller Switching", () => cfg.Enabled, (v) => cfg.Enabled = v);
@@ -32,7 +35,7 @@ public class ConfigWindow : Window, IDisposable {
         ImguiRadioButton("Both", () => cfg.ControllerSticks == ControllerSticks.Both, () => cfg.ControllerSticks = ControllerSticks.Both, sameLine: false);
 
         int stickDeadzone = cfg.StickDeadzone;
-        ImGui.Text("Stick deadzone"); ImGui.SameLine();
+        ImGui.Text("Stick: Switching threashold"); ImGui.SameLine();
         if (ImGui.DragInt("##StickDeadzone", ref stickDeadzone, 1, 1, 100)) 
             cfg.StickDeadzone = stickDeadzone;
 
@@ -40,25 +43,29 @@ public class ConfigWindow : Window, IDisposable {
 
         if (cfg.SwitchHudLayouts == false) ImGui.BeginDisabled();
 
-        ImGui.BeginChild("layHud", new Vector2(380, 140), true);
-        {
-            ImGui.Text("Keyboard Layout");
-            ImGui.BeginChild("layHud_Keyboard", new Vector2(360, 38), true); {
-                ImguiRadioButton("Layout 1", () => cfg.HudSwitchMKB == 1, () => cfg.HudSwitchMKB = 1); ImGui.SameLine();
-                ImguiRadioButton("Layout 2", () => cfg.HudSwitchMKB == 2, () => cfg.HudSwitchMKB = 2); ImGui.SameLine();
-                ImguiRadioButton("Layout 3", () => cfg.HudSwitchMKB == 3, () => cfg.HudSwitchMKB = 3); ImGui.SameLine();
-                ImguiRadioButton("Layout 4", () => cfg.HudSwitchMKB == 4, () => cfg.HudSwitchMKB = 4); ImGui.SameLine();
-            } ImGui.EndChild();
+        ImGui.Dummy(new Vector2(0, 3));
+        ImGui.Separator();
+        ImGui.Dummy(new Vector2(0, 3));
 
-            ImGui.Text("Controller Layout");
-            ImGui.BeginChild("layHud_Controller", new Vector2(360, 38), true); {
-                ImguiRadioButton("Layout 1", () => cfg.HudSwitchController == 1, () => cfg.HudSwitchController = 1); ImGui.SameLine();
-                ImguiRadioButton("Layout 2", () => cfg.HudSwitchController == 2, () => cfg.HudSwitchController = 2); ImGui.SameLine();
-                ImguiRadioButton("Layout 3", () => cfg.HudSwitchController == 3, () => cfg.HudSwitchController = 3); ImGui.SameLine();
-                ImguiRadioButton("Layout 4", () => cfg.HudSwitchController == 4, () => cfg.HudSwitchController = 4); ImGui.SameLine();
-            } ImGui.EndChild();
-        }
-        ImGui.EndChild();
+        ImGuiExtensions.BeginGroupPanel("Keyboard Layout"); {
+            ImguiRadioButton("Layout 1", () => cfg.HudSwitchMKB == 1, () => cfg.HudSwitchMKB = 1); ImGui.SameLine();
+            ImguiRadioButton("Layout 2", () => cfg.HudSwitchMKB == 2, () => cfg.HudSwitchMKB = 2); ImGui.SameLine();
+            ImguiRadioButton("Layout 3", () => cfg.HudSwitchMKB == 3, () => cfg.HudSwitchMKB = 3); ImGui.SameLine();
+            ImguiRadioButton("Layout 4", () => cfg.HudSwitchMKB == 4, () => cfg.HudSwitchMKB = 4); ImGui.SameLine();
+            ImGui.Dummy(new Vector2(0, 30));
+        } ImGuiExtensions.EndGroupPanel();
+
+        ImGuiExtensions.BeginGroupPanel("Controller Layout"); {
+            ImguiRadioButton("Layout 1", () => cfg.HudSwitchController == 1, () => cfg.HudSwitchController = 1); ImGui.SameLine();
+            ImguiRadioButton("Layout 2", () => cfg.HudSwitchController == 2, () => cfg.HudSwitchController = 2); ImGui.SameLine();
+            ImguiRadioButton("Layout 3", () => cfg.HudSwitchController == 3, () => cfg.HudSwitchController = 3); ImGui.SameLine();
+            ImguiRadioButton("Layout 4", () => cfg.HudSwitchController == 4, () => cfg.HudSwitchController = 4); ImGui.SameLine();
+            ImGui.Dummy(new Vector2(0, 30));
+        } ImGuiExtensions.EndGroupPanel();
+
+        ImGui.Dummy(new Vector2(0, 5));
+        ImGui.Separator();
+        ImGui.Dummy(new Vector2(0, 5));
 
         if (cfg.SwitchHudLayouts == false) ImGui.EndDisabled();
 
