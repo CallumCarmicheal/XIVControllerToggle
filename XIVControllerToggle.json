@@ -1,0 +1,18 @@
+{
+  "Author": "Aida Enna (Originally Callum Carmicheal)",
+  "Name": "The Great Controller HUD Switcher",
+  "InternalName": "XIVControllerToggle",
+  "AssemblyVersion": "1.0.0.1",
+  "ApplicableVersion": "any",
+  "Description": "A simple tool to automatically switch between keyboard and controller hud's when pressing WASD or moving the left joystick. You can setup a macro to add the actions to your hotbar.",
+  "Punchline": "Toggle controller / mouse mode automatically or with commands.",
+  "RepoUrl": "hhttps://github.com/Aida-Enna/TwitchXIV",
+  "Tags": [
+    "controller",
+    "keyboard",
+    "hud",
+    "aida"
+  ],
+  "DalamudApiLevel": 10,
+  "IconUrl": "https://i.imgur.com/wevPAK7.png"
+}

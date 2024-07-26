@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
+    <Import Project="Dalamud.Plugin.Bootstrap.targets" />
+
+    <PropertyGroup>
+        <Authors>Aida Enna</Authors>
+        <Company></Company>
+        <Version>1.0.1.1</Version>
+        <Description>The Great Controller HUD Switcher</Description>
+        <Copyright></Copyright>
+        <PackageProjectUrl>https://github.com/Aida-Enna/XIVControllerToggle</PackageProjectUrl>
+        <PackageLicenseExpression>AGPL-3.0-or-later</PackageLicenseExpression>
+        <IsPackable>false</IsPackable>
+        <TargetFramework>net8.0</TargetFramework>
+		<OutputPath>..\Build\XIVControllerToggle\</OutputPath>
+    </PropertyGroup>
+</Project>

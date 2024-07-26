@@ -16,16 +16,16 @@ using VK = Dalamud.Game.ClientState.Keys.VirtualKey;
 
 namespace XIVControllerToggle {
     public sealed class Plugin : IDalamudPlugin {
-        public string Name => "The Great Controller Hud Switcher";
+        public string Name => "The Great Controller HUD Switcher";
         private const string CommandName = "/controllerhudcfg";
 
-        public Configuration Configuration { get; init; }
-        public WindowSystem WindowSystem = new("ControllerHudSwitcher");
+        public static Configuration PluginConfig { get; set; }
+        public WindowSystem WindowSystem = new("ControllerHUDSwitcher");
 
         private ConfigWindow ConfigWindow { get; init; }
         private DebugWindow DebugWindow { get; init; }
 
-        private static DalamudPluginInterface PluginInterface { get; set; } = null!;
+        private static IDalamudPluginInterface PluginInterface { get; set; } = null!;
         public static ICommandManager CommandManager { get; set; } = null!;
         public static IFramework Framework { get; private set; } = null!;
         public static IPluginLog Log { get; private set; } = null!;
@@ -36,15 +36,15 @@ namespace XIVControllerToggle {
         public static IGamepadState GamepadState { get; private set; } = null!;
 
         public Plugin(
-            [RequiredVersion("1.0")] DalamudPluginInterface pluginInterface,
-            [RequiredVersion("1.0")] IFramework framework,
-            [RequiredVersion("1.0")] ICommandManager commandManager,
-            [RequiredVersion("1.0")] IPluginLog pluginLog,
-            [RequiredVersion("1.0")] IGameGui gameGui,
-            [RequiredVersion("1.0")] IGameConfig gameConfig,
-            [RequiredVersion("1.0")] ISigScanner sigScanner,
-            [RequiredVersion("1.0")] IKeyState keyState,
-            [RequiredVersion("1.0")] IGamepadState gamepadState
+            IDalamudPluginInterface pluginInterface,
+            IFramework framework,
+            ICommandManager commandManager,
+            IPluginLog pluginLog,
+            IGameGui gameGui,
+            IGameConfig gameConfig,
+            ISigScanner sigScanner,
+            IKeyState keyState,
+            IGamepadState gamepadState
         ) {
             PluginInterface = pluginInterface;
             Framework = framework;
@@ -58,9 +58,10 @@ namespace XIVControllerToggle {
 
             Log.Info("Startup!");
 
-            this.Configuration = PluginInterface.GetPluginConfig() as Configuration ?? new Configuration();
-            this.Configuration.Initialize(PluginInterface, this);
-            this.Configuration.ClampValues();
+
+            PluginConfig = PluginInterface.GetPluginConfig() as Configuration ?? new Configuration();
+            PluginConfig.Initialize(PluginInterface, this);
+            PluginConfig.ClampValues();
 
             ConfigWindow = new ConfigWindow(this);
             DebugWindow = new DebugWindow(this);
@@ -122,7 +123,7 @@ namespace XIVControllerToggle {
         private void Update_ProcessKeypresses() {
             // Run every 250ms
             if (DateTime.Now < controllerProcessDelay) return;
-            if (Configuration.Enabled == false) return; // Dont run if disabled
+            if (PluginConfig.Enabled == false) return; // Dont run if disabled
 
             var gs = GamepadState;
             var ks = KeyState;
@@ -132,7 +133,7 @@ namespace XIVControllerToggle {
 
             var ls = Math.Max(gs.LeftStick.X.abs(), gs.LeftStick.Y.abs());
             var rs = Math.Max(gs.RightStick.X.abs(), gs.RightStick.Y.abs());
-            var max = Configuration.ControllerSticks switch {
+            var max = PluginConfig.ControllerSticks switch {
                 ControllerSticks.Both => Math.Max(ls, rs),
                 ControllerSticks.LS => ls,
                 ControllerSticks.RS => rs,
@@ -147,7 +148,7 @@ namespace XIVControllerToggle {
                 }
             } else {
                 // Our deadzone modifier is 25
-                if (max >= Configuration.StickDeadzone) {
+                if (max >= PluginConfig.StickDeadzone) {
                     swap = true;
                 }
             }
@@ -205,8 +206,8 @@ namespace XIVControllerToggle {
 
             gameConfig.Set(UiConfigOption.PadMode, currentlyPadMode);
 
-            if (Configuration.SwitchHudLayouts) {
-                int hudLayout = currentlyPadMode ? Configuration.HudSwitchController : Configuration.HudSwitchMKB;
+            if (PluginConfig.SwitchHudLayouts) {
+                int hudLayout = currentlyPadMode ? PluginConfig.HudSwitchController : PluginConfig.HudSwitchMKB;
                 string rawCmd = $"/hudlayout {hudLayout}";
                 ChatHelper.SendChatMessage(rawCmd);
             }

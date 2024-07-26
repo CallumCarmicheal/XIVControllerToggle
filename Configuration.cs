@@ -19,11 +19,11 @@ namespace XIVControllerToggle {
 
         // the below exist just to make saving less cumbersome
         [NonSerialized]
-        private DalamudPluginInterface? pluginInterface;
+        private IDalamudPluginInterface? pluginInterface;
         [NonSerialized]
         private Plugin? plugin;
 
-        public void Initialize(DalamudPluginInterface pluginInterface, Plugin plugin) {
+        public void Initialize(IDalamudPluginInterface pluginInterface, Plugin plugin) {
             this.plugin = plugin;
             this.pluginInterface = pluginInterface;
         }
