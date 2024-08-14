@@ -60,5 +60,11 @@ public class DebugWindow : Window, IDisposable {
         ImGui.Text($"Can Swap (Timeout): {(Plugin.SwapTimeout <= DateTime.Now)}");
 
         ImGui.Spacing();
+
+        //if (ImGui.Button("Testing, Spawn ActionInputDialog")) {
+        //    var wind = new ActionInputDialog(this.plugin);
+        //    plugin.WindowSystem.AddWindow(wind);
+        //    wind.IsOpen = true;
+        //}
     }
 }

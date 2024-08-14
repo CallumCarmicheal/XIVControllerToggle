@@ -3,15 +3,23 @@
     <Import Project="Dalamud.Plugin.Bootstrap.targets" />
 
     <PropertyGroup>
-        <Authors>Aida Enna</Authors>
+        <Authors>Callum Carmicheal</Authors>
         <Company></Company>
-        <Version>1.0.1.1</Version>
+        <Version>1.0.2.0</Version>
         <Description>The Great Controller HUD Switcher</Description>
         <Copyright></Copyright>
-        <PackageProjectUrl>https://github.com/Aida-Enna/XIVControllerToggle</PackageProjectUrl>
+        <PackageProjectUrl>https://github.com/CallumCarmicheal/XIVControllerToggle</PackageProjectUrl>
         <PackageLicenseExpression>AGPL-3.0-or-later</PackageLicenseExpression>
         <IsPackable>false</IsPackable>
         <TargetFramework>net8.0</TargetFramework>
 		<OutputPath>..\Build\XIVControllerToggle\</OutputPath>
     </PropertyGroup>
+
+    <ItemGroup>
+      <Compile Remove="Windows\ActionInputDialog.cs" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Include="Windows\ActionInputDialog.cs" />
+    </ItemGroup>
 </Project>

@@ -19,7 +19,7 @@ namespace XIVControllerToggle {
         public string Name => "The Great Controller HUD Switcher";
         private const string CommandName = "/controllerhudcfg";
 
-        public static Configuration PluginConfig { get; set; }
+        public static Configuration PluginConfig { get; set; } = new Configuration();
         public WindowSystem WindowSystem = new("ControllerHUDSwitcher");
 
         private ConfigWindow ConfigWindow { get; init; }
@@ -56,8 +56,7 @@ namespace XIVControllerToggle {
             SigScanner = sigScanner;
             GamepadState = gamepadState;
 
-            Log.Info("Startup!");
-
+            // Log.Info("Startup!");
 
             PluginConfig = PluginInterface.GetPluginConfig() as Configuration ?? new Configuration();
             PluginConfig.Initialize(PluginInterface, this);

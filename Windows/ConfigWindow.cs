@@ -8,10 +8,9 @@ using ImGuiNET;
 namespace XIVControllerToggle.Windows;
 
 public class ConfigWindow : Window, IDisposable {
-    //private readonly Configuration cfg;
     private readonly Plugin plugin;
 
-    public ConfigWindow(Plugin plugin) : base(
+    public ConfigWindow(Plugin plugin) : base (
         "The Great Controller HUD Switcher", ImGuiWindowFlags.AlwaysAutoResize) {
         
         this.SizeCondition = ImGuiCond.Always;
@@ -21,7 +20,6 @@ public class ConfigWindow : Window, IDisposable {
         };
 
         this.plugin = plugin;
-        //this.cfg = plugin.Configuration;
     }
 
     public void Dispose() { }
