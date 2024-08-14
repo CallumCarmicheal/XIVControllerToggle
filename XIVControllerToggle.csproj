@@ -14,12 +14,5 @@
         <TargetFramework>net8.0</TargetFramework>
 		<OutputPath>..\Build\XIVControllerToggle\</OutputPath>
     </PropertyGroup>
-
-    <ItemGroup>
-      <Compile Remove="Windows\ActionInputDialog.cs" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <None Include="Windows\ActionInputDialog.cs" />
-    </ItemGroup>
+	
 </Project>

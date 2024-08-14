@@ -61,10 +61,10 @@ public class DebugWindow : Window, IDisposable {
 
         ImGui.Spacing();
 
-        //if (ImGui.Button("Testing, Spawn ActionInputDialog")) {
-        //    var wind = new ActionInputDialog(this.plugin);
-        //    plugin.WindowSystem.AddWindow(wind);
-        //    wind.IsOpen = true;
-        //}
+        if (ImGui.Button("Testing, Spawn ActionInputDialog")) {
+            var wind = new ActionInputDialog(this.plugin);
+            plugin.WindowSystem.AddWindow(wind);
+            wind.IsOpen = true;
+        }
     }
 }
