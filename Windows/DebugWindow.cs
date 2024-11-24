@@ -52,19 +52,29 @@ public class DebugWindow : Window, IDisposable {
 
         if (ImGui.Button("Attempt Switch")) 
             plugin.PerformControllerKeyboardSwitch();
-       
+
+        if (ImGui.Button("Set Hud 1"))
+            ChatHelper.SendChatMessage("/hudlayout 1");
+        if (ImGui.Button("Set Hud 2"))
+            ChatHelper.SendChatMessage("/hudlayout 2");
+        if (ImGui.Button("Set Hud 3"))
+            ChatHelper.SendChatMessage("/hudlayout 3");
+        if (ImGui.Button("Set Hud 4"))
+            ChatHelper.SendChatMessage("/hudlayout 4");
+
         ImGui.Text($"LEFT - X: {gp.LeftStick.X.abs()}, Y: {gp.LeftStick.Y.abs()}.");
         ImGui.Text($"RIGHT - X: {gp.RightStick.X.abs()}, Y: {gp.RightStick.Y.abs()}.");
 
         ImGui.Text($"KB W:{ks[VK.W]}, S:{ks[VK.S]}, A:{ks[VK.A]}, D:{ks[VK.D]}.");
         ImGui.Text($"Can Swap (Timeout): {(Plugin.SwapTimeout <= DateTime.Now)}");
 
+#if DEV
         ImGui.Spacing();
-
         if (ImGui.Button("Testing, Spawn ActionInputDialog")) {
             var wind = new ActionInputDialog(this.plugin);
             plugin.WindowSystem.AddWindow(wind);
             wind.IsOpen = true;
         }
+#endif
     }
 }

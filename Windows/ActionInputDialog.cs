@@ -12,8 +12,6 @@ using Dalamud.Interface.Utility.Raii;
 using Dalamud.Interface.Windowing;
 using ImGuiNET;
 
-using Lumina.Excel.GeneratedSheets;
-
 using ImGExt = XIVControllerToggle.ImGuiExtensions;
 
 namespace XIVControllerToggle.Windows;
@@ -87,6 +85,7 @@ internal class ActionInputDialog : Window, IDisposable {
     }
 
     public override void Draw() {
+        //renderUserInterface();
         renderUserInterface();
     }
 
@@ -113,6 +112,16 @@ internal class ActionInputDialog : Window, IDisposable {
     private void renderUserInterface() {
         ImGui.Checkbox("Enable plugin (Enables switching)", ref m_EnablePlugin);
 
+        ImGui.AlignTextToFramePadding();
+        ImGui.TextUnformatted("Stick switching threshold:");
+        ImGui.SameLine(0, 1 * ImGui.GetStyle().ItemSpacing.X);
+        ImGui.SetNextItemWidth(200);
+        ImGui.SliderInt("##m_Simple_StickDeadzone", ref m_Simple_StickDeadzone, 1, 100, "%i");
+
+        ImGui.PushStyleColor(ImGuiCol.Text, 0xff0099ff);
+        ImGui.TextUnformatted("   (note: this is applied after the deadzone set in-game)");
+        ImGui.PopStyleColor();
+
         ImGuiExtensions.Spacing(4);
         ImGui.TextUnformatted("Please select a configuration type:");
         ImGui.SameLine();
@@ -124,6 +133,8 @@ internal class ActionInputDialog : Window, IDisposable {
         if (ImGui.BeginTabBar("tbConfigTypes", ImGuiTabBarFlags.None)) {
             if (ImGui.BeginTabItem("Simple Settings")) {
                 ImGui.AlignTextToFramePadding();
+                if (m_ConfigurationType == 1) ImGui.BeginDisabled();
+
                 ImGui.TextUnformatted("Switch to Pad Crossbars on: ");
 
                 ImGui.SameLine(0, 1 * ImGui.GetStyle().ItemSpacing.X);
@@ -135,28 +146,21 @@ internal class ActionInputDialog : Window, IDisposable {
                 ImGui.SameLine(0, 1 * ImGui.GetStyle().ItemSpacing.X);
                 ImGui.RadioButton("Either", ref m_Simple_SwitchOnJoystick, 2);
 
-                ImGui.AlignTextToFramePadding();
-                ImGui.TextUnformatted("Stick switching threshold:");
-
-                ImGui.SameLine(0, 1 * ImGui.GetStyle().ItemSpacing.X);
-                ImGui.SetNextItemWidth(200);
-                ImGui.SliderInt("##m_Simple_StickDeadzone", ref m_Simple_StickDeadzone, 1, 100, "%i");
-
-                ImGui.PushStyleColor(ImGuiCol.Text, 0xff0099ff);
-                ImGui.TextUnformatted("   (note: this is applied after the deadzone set in-game)");
-                ImGui.PopStyleColor();
-
                 // ImGExt.Spacing(5);
                 // ImGui.PushStyleVar(ImGuiStyleVar.IndentSpacing, 2 * ImGui.GetStyle().IndentSpacing / 2);
                 // ImGui.Button("Add current configuration to advanced");
                 // ImGui.PopStyleVar();
 
+                if (m_ConfigurationType == 1) ImGui.EndDisabled();
+
                 ImGui.EndTabItem();
             }
 
             if (ImGui.BeginTabItem("Advanced Settings")) {
-                ImGui.TextUnformatted("This is an advanced input editor that allows you specify what keys to change on.");
                 ImGui.AlignTextToFramePadding();
+
+                if (m_ConfigurationType == 0) ImGui.BeginDisabled();
+                ImGui.TextUnformatted("This is an advanced input editor that allows you specify what keys to change on.");
 
 #pragma warning disable SeStringRenderer
                 var id = (ImGuiId)ImGui.GetID("OpenLink##LinkOpen");
@@ -202,6 +206,8 @@ internal class ActionInputDialog : Window, IDisposable {
                         renderTableInputRow(5, ref _comboIdx6, ref _inputLine6);
                     }
                 }
+
+                if (m_ConfigurationType == 0) ImGui.EndDisabled();
 
                 ImGui.EndTabItem();
             }
@@ -273,75 +279,5 @@ internal class ActionInputDialog : Window, IDisposable {
         if (ImGuiComponents.IconButton(Dalamud.Interface.FontAwesomeIcon.Keyboard)) {
             // Popout into popup large input window.
         }
-    }
-
-    private void oldRenderCode() {
-        if (ImGui.Combo("Action Type", ref selectedActionIdx, "Toggle\0Switch to KBM\0Switch to Pad")) {
-            // Action changed
-        }
-
-        ImGui.Text("Press escape to stop capturing keys.");
-
-        var buttonText = capturingKeys ? "Stop capture...##btnCapture" : "Capture keys.##btnCapture";
-        if (ImGui.Button(buttonText)) {
-            capturingKeys = !capturingKeys;
-        }; ImGui.SameLine();
-
-        if (ImGui.Button("Reset capture combo")) {
-            capturedKeys = (new(), new());
-        }; ImGui.SameLine();
-
-        if (ImGui.Button("Add detected keys")) { }
-        if (capturingKeys) updateCapturedState();
-
-        using (ImRaii.Table("detectedKeys", 3)) {
-            ImGui.TableNextRow();
-            ImGui.TableNextColumn();
-            ImGui.TableSetupColumn("Actions");
-            ImGui.TableNextColumn();
-            ImGui.TableSetupColumn("Not Pressed");
-            ImGui.TableNextColumn();
-            ImGui.TableSetupColumn("Key");
-
-            // Sample data test
-            ImGui.TableNextColumn();
-            ImGui.Text("_actions1");
-            ImGui.TableNextColumn();
-            ImGui.Text("_np1");
-            ImGui.TableNextColumn();
-            ImGui.Text("_key1");
-
-            // Sample data test
-            ImGui.TableNextColumn();
-            ImGui.Text("_actions2");
-            ImGui.TableNextColumn();
-            ImGui.Text("_np2");
-            ImGui.TableNextColumn();
-            ImGui.Text("_key2");
-        }
-
-
-
-        //for (int x = 0; x < capturedKeys.keyboardKeys.Count; x++) {
-        //    var kv = capturedKeys.keyboardKeys[x];
-
-        //    ImGui.TableNextRow();
-        //    ImGui.TableNextColumn();
-
-        //    ImGui.Button("Edit"); ImGui.SameLine();
-        //    ImGui.Button("Remove");
-
-        //    ImGui.TableNextColumn();
-        //    ImGui.Checkbox("!##NotPressed", ref kv.notPressed);
-
-        //    ImGui.TableNextColumn();
-        //    ImGui.Text("(KBM) " + kv.key.ToString());
-        //}
-
-        // 
-        ImGui.BeginTable("Grouped Key Actions", 2);
-
-
-        ImGui.EndTable();
     }
 }
