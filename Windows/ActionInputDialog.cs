@@ -16,6 +16,7 @@ using ImGExt = XIVControllerToggle.ImGuiExtensions;
 
 namespace XIVControllerToggle.Windows;
 
+#if DEV_NewUI
 internal class ActionInputDialog : Window, IDisposable {
     private readonly Plugin plugin;
     private int selectedActionIdx = 0;
@@ -281,3 +282,4 @@ internal class ActionInputDialog : Window, IDisposable {
         }
     }
 }
+#endif

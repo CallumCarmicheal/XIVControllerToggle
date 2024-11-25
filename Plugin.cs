@@ -13,6 +13,7 @@ using TPie.Helpers;
 using System;
 
 using VK = Dalamud.Game.ClientState.Keys.VirtualKey;
+using FFXIVClientStructs.FFXIV.Component.GUI;
 
 namespace XIVControllerToggle {
     public sealed class Plugin : IDalamudPlugin {
@@ -153,7 +154,15 @@ namespace XIVControllerToggle {
             }
 
             if (swap) {
-                PerformControllerKeyboardSwitch();
+                var isPad = PerformControllerKeyboardSwitch();
+                if (isPad.HasValue) {
+                    if (isPad.Value && PluginConfig.HudSwitchPad_HideChat) {
+                        XIVFunctions.HideChatLog();
+                    }
+                    else if (!isPad.Value && PluginConfig.HudSwitchMKB_HideChat) {
+                        XIVFunctions.HideChatLog();
+                    }
+                }
             }
 
             controllerProcessDelay = DateTime.Now.AddMilliseconds(250);
@@ -186,10 +195,10 @@ namespace XIVControllerToggle {
         public void DrawDebugUI() => DebugWindow.IsOpen = true;
 
         public static DateTime SwapTimeout = DateTime.Now;
-        public void PerformControllerKeyboardSwitch(bool? forceSwitchToController = null) {
+        public bool? PerformControllerKeyboardSwitch(bool? forceSwitchToController = null) {
             // Delay swapping to once a second (As chat commands are involved).
             if (SwapTimeout > DateTime.Now)
-                return;
+                return null;
 
             var gameConfig = Plugin.GameConfig;
 
@@ -212,6 +221,8 @@ namespace XIVControllerToggle {
             }
 
             SwapTimeout = DateTime.Now.AddSeconds(1);
+
+            return currentlyPadMode;
         }
     }
 }

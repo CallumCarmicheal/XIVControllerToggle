@@ -47,20 +47,28 @@ public class ConfigWindow : Window, IDisposable {
         ImGui.Dummy(new Vector2(0, 3));
 
         ImGuiExtensions.BeginGroupPanel("Keyboard Layout"); {
+            ImGui.Dummy(new Vector2(1, 0)); ImGui.SameLine();
             ImGuiExtensions.ImguiRadioButton("Layout 1", "KBL", () => Plugin.PluginConfig.HudSwitchMKB == 1, () => Plugin.PluginConfig.HudSwitchMKB = 1); ImGui.SameLine();
             ImGuiExtensions.ImguiRadioButton("Layout 2", "KBL", () => Plugin.PluginConfig.HudSwitchMKB == 2, () => Plugin.PluginConfig.HudSwitchMKB = 2); ImGui.SameLine();
             ImGuiExtensions.ImguiRadioButton("Layout 3", "KBL", () => Plugin.PluginConfig.HudSwitchMKB == 3, () => Plugin.PluginConfig.HudSwitchMKB = 3); ImGui.SameLine();
-            ImGuiExtensions.ImguiRadioButton("Layout 4", "KBL", () => Plugin.PluginConfig.HudSwitchMKB == 4, () => Plugin.PluginConfig.HudSwitchMKB = 4); ImGui.SameLine();
-            ImGui.Dummy(new Vector2(0, 30));
-        } ImGuiExtensions.EndGroupPanel();
+            ImGuiExtensions.ImguiRadioButton("Layout 4", "KBL", () => Plugin.PluginConfig.HudSwitchMKB == 4, () => Plugin.PluginConfig.HudSwitchMKB = 4);
+            ImGui.Dummy(new Vector2(1, 3)); ImGui.SameLine();
+            ImGuiExtensions.ImguiCheckbox("Hide chat on switch##lblKBMHideChat", () => Plugin.PluginConfig.HudSwitchMKB_HideChat, (v) => Plugin.PluginConfig.HudSwitchMKB_HideChat = v);
+            ImGui.Dummy(new Vector2(0, 3));
+        }
+        ImGuiExtensions.EndGroupPanel();
 
         ImGuiExtensions.BeginGroupPanel("Pad Layout"); {
+            ImGui.Dummy(new Vector2(0, 0)); ImGui.SameLine();
             ImGuiExtensions.ImguiRadioButton("Layout 1", "PL", () => Plugin.PluginConfig.HudSwitchController == 1, () => Plugin.PluginConfig.HudSwitchController = 1); ImGui.SameLine();
             ImGuiExtensions.ImguiRadioButton("Layout 2", "PL", () => Plugin.PluginConfig.HudSwitchController == 2, () => Plugin.PluginConfig.HudSwitchController = 2); ImGui.SameLine();
             ImGuiExtensions.ImguiRadioButton("Layout 3", "PL", () => Plugin.PluginConfig.HudSwitchController == 3, () => Plugin.PluginConfig.HudSwitchController = 3); ImGui.SameLine();
-            ImGuiExtensions.ImguiRadioButton("Layout 4", "PL", () => Plugin.PluginConfig.HudSwitchController == 4, () => Plugin.PluginConfig.HudSwitchController = 4); ImGui.SameLine();
-            ImGui.Dummy(new Vector2(0, 30));
-        } ImGuiExtensions.EndGroupPanel();
+            ImGuiExtensions.ImguiRadioButton("Layout 4", "PL", () => Plugin.PluginConfig.HudSwitchController == 4, () => Plugin.PluginConfig.HudSwitchController = 4);
+            ImGui.Dummy(new Vector2(0, 3)); ImGui.SameLine();
+            ImGuiExtensions.ImguiCheckbox("Hide chat on switch##lblPadHideChat", () => Plugin.PluginConfig.HudSwitchPad_HideChat, (v) => Plugin.PluginConfig.HudSwitchPad_HideChat = v);
+            ImGui.Dummy(new Vector2(0, 3));
+        }
+        ImGuiExtensions.EndGroupPanel();
 
         ImGui.Dummy(new Vector2(0, 5));
         ImGui.Separator();

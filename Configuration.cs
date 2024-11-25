@@ -6,8 +6,6 @@ using System.Collections.Generic;
 
 namespace XIVControllerToggle {
 
-
-
     [Serializable]
     public class Configuration : IPluginConfiguration {
         public int Version { get; set; } = 1;
@@ -21,7 +19,12 @@ namespace XIVControllerToggle {
         public int HudSwitchMKB { get; set; } = 1;
         public int HudSwitchController { get; set; } = 1;
 
+        public bool HudSwitchPad_HideChat { get; set; } = false;
+        public bool HudSwitchMKB_HideChat { get; set; } = false;
+
         public int ConfigurationType { get; set; } = 0;
+
+        // New Controller UI (WIP)
         public AdvancedKeybindConfiguration AdvancedKeybinds { get; set; } = new AdvancedKeybindConfiguration();
 
         // the below exist just to make saving less cumbersome
