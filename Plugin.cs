@@ -29,7 +29,7 @@ namespace XIVControllerToggle {
         private ConfigWindow ConfigWindow { get; init; }
         private DebugWindow DebugWindow { get; init; }
         private ImguiStringListEditor ImguiStringListEditor { get; init; }
-
+        
         private static IDalamudPluginInterface PluginInterface { get; set; } = null!;
         public static ICommandManager CommandManager { get; set; } = null!;
         public static IFramework Framework { get; private set; } = null!;
@@ -252,6 +252,14 @@ namespace XIVControllerToggle {
                         CommandManager.ProcessCommand($"/xlenablecollection {col}");
                     }
                 }
+            }
+
+            if (PluginConfig.HudScaling_Enabled) {
+                uint targetMode = currentlyPadMode
+                    ? PluginConfig.HudScaling_PadMode 
+                    : PluginConfig.HudScaling_KBMMode;
+
+                gameConfig.Set(SystemConfigOption.UiHighScale, targetMode);
             }
 
             SwapTimeout = DateTime.Now.AddSeconds(1);

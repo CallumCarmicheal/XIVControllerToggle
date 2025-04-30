@@ -16,7 +16,7 @@ using ImGExt = XIVControllerToggle.ImGuiExtensions;
 
 namespace XIVControllerToggle.Windows;
 
-#if DEV_NewUI
+#if DEBUG
 internal class ActionInputDialog : Window, IDisposable {
     private readonly Plugin plugin;
     private int selectedActionIdx = 0;
@@ -103,10 +103,10 @@ internal class ActionInputDialog : Window, IDisposable {
     private int _comboIdx4 = 0;
     private int _comboIdx5 = 2;
     private int _comboIdx6 = 2;
-    private string _inputLine1 = "[ CTRL, ALT, 5 ]";
-    private string _inputLine2 = "w, d, [ !alt, s ], [ !ALT, A ]";
+    private string _inputLine1 = "[ CTRL + ALT + 5 ]";
+    private string _inputLine2 = "w, d, [ !alt + s ], [ !ALT + A ]";
     private string _inputLine3 = "p:RS, p:Y";
-    private string _inputLine4 = "F9, [ p:LS, p:Y ]";
+    private string _inputLine4 = "F9, [ p:LS + p:Y ]";
     private string _inputLine5 = "p:LSV, p:RSV";
     private string _inputLine6 = "p:LSV>10, p:RSV>10";
 
@@ -123,7 +123,7 @@ internal class ActionInputDialog : Window, IDisposable {
         ImGui.TextUnformatted("   (note: this is applied after the deadzone set in-game)");
         ImGui.PopStyleColor();
 
-        ImGuiExtensions.Spacing(4);
+        ImGuiExtensions.Spacing(2);
         ImGui.TextUnformatted("Please select a configuration type:");
         ImGui.SameLine();
         ImGui.RadioButton("Simple", ref m_ConfigurationType, 0);
@@ -205,6 +205,24 @@ internal class ActionInputDialog : Window, IDisposable {
                         renderTableInputRow(3, ref _comboIdx4, ref _inputLine4);
                         renderTableInputRow(4, ref _comboIdx5, ref _inputLine5);
                         renderTableInputRow(5, ref _comboIdx6, ref _inputLine6);
+                        renderTableInputRow(6, ref _comboIdx1, ref _inputLine1);
+                        renderTableInputRow(7, ref _comboIdx2, ref _inputLine2);
+                        renderTableInputRow(8, ref _comboIdx3, ref _inputLine3);
+                        renderTableInputRow(9, ref _comboIdx4, ref _inputLine4);
+                        renderTableInputRow(10, ref _comboIdx5, ref _inputLine5);
+                        renderTableInputRow(11, ref _comboIdx6, ref _inputLine6);
+                        renderTableInputRow(12, ref _comboIdx1, ref _inputLine1);
+                        renderTableInputRow(13, ref _comboIdx2, ref _inputLine2);
+                        renderTableInputRow(14, ref _comboIdx3, ref _inputLine3);
+                        renderTableInputRow(15, ref _comboIdx4, ref _inputLine4);
+                        renderTableInputRow(16, ref _comboIdx5, ref _inputLine5);
+                        renderTableInputRow(17, ref _comboIdx6, ref _inputLine6);
+                        renderTableInputRow(18, ref _comboIdx1, ref _inputLine1);
+                        renderTableInputRow(19, ref _comboIdx2, ref _inputLine2);
+                        renderTableInputRow(20, ref _comboIdx3, ref _inputLine3);
+                        renderTableInputRow(21, ref _comboIdx4, ref _inputLine4);
+                        renderTableInputRow(22, ref _comboIdx5, ref _inputLine5);
+                        renderTableInputRow(23, ref _comboIdx6, ref _inputLine6);
                     }
                 }
 

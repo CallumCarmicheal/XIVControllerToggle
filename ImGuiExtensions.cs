@@ -41,7 +41,7 @@ namespace XIVControllerToggle {
                 ImGui.SameLine();
         }
 
-        public static void BeginGroupPanel(string name = "", Vector2? size_arg = null) {
+        private static void BeginGroupPanel(string name = "", Vector2? size_arg = null) {
             Vector2 size;
             if (size_arg != null) size = size_arg.Value;
             else size = new Vector2(-1.0f, -1.0f);
@@ -88,7 +88,7 @@ namespace XIVControllerToggle {
             ImGui.Dummy(new Vector2(0, 1));
         }
 
-        public static void EndGroupPanel() {
+        private static void EndGroupPanel() {
             ImGui.PopItemWidth();
 
             Vector2 itemSpacing = ImGui.GetStyle().ItemSpacing;
@@ -160,6 +160,15 @@ namespace XIVControllerToggle {
         public static IEndObject GroupPanel(string name = "", Vector2? size_arg = null) {
             BeginGroupPanel(name, size_arg);
             return new EndUnconditionally(EndGroupPanel, true);
+        }
+
+        public static IEndObject DisabledIf(bool isDisabled) {
+            if (isDisabled) ImGui.BeginDisabled();
+            return new EndConditionally(EndDisabled, isDisabled);
+        }
+
+        public static void EndDisabled() {
+            ImGui.EndDisabled();
         }
 
         #region ImRaii functions

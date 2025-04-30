@@ -28,7 +28,23 @@ namespace XIVControllerToggle {
         public List<string> CollectionsToEnablePAD { get; set; } = new List<string>();
         public List<string> CollectionsToDisablePAD { get; set; } = new List<string>();
 
+        public bool HudScaling_Enabled { get; set; } = false;
 
+        private uint _hudScaling_KBM = 0;
+        private uint _hudScaling_PadMode = 0;
+
+        public uint HudScaling_KBMMode { 
+            get => _hudScaling_KBM;
+            set {
+                _hudScaling_KBM = Math.Clamp(value, 0, 3);
+            }
+        }
+        public uint HudScaling_PadMode { 
+            get => _hudScaling_PadMode; 
+            set {
+                _hudScaling_PadMode = Math.Clamp(value, 0, 3); 
+            } 
+        }
 
         public int ConfigurationType { get; set; } = 0;
 

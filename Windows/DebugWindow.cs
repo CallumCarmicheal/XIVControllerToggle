@@ -61,10 +61,16 @@ public class DebugWindow : Window, IDisposable {
             ChatHelper.SendChatMessage("/hudlayout 3");
         if (ImGui.Button("Set Hud 4"))
             ChatHelper.SendChatMessage("/hudlayout 4");
-        if (ImGui.Button("Disable collection: FPS"))
-            ChatHelper.SendChatMessage("/xldisablecollection FPS");
-        if (ImGui.Button("Enable collection: FPS"))
-            ChatHelper.SendChatMessage("/xlenablecollection FPS");
+
+#if (DEV)
+        if (ImGui.Button("Test input window"))
+            plugin.KeyboardSwitchingKeys.IsOpen = true;
+#endif
+
+        gameConfig.TryGet(SystemConfigOption.UiHighScale, out uint cfgUiHighScale);
+
+        ImGui.Text($"Config UI High scale: {cfgUiHighScale}");
+
 
         ImGui.Text($"LEFT - X: {gp.LeftStick.X.abs()}, Y: {gp.LeftStick.Y.abs()}.");
         ImGui.Text($"RIGHT - X: {gp.RightStick.X.abs()}, Y: {gp.RightStick.Y.abs()}.");
@@ -72,7 +78,7 @@ public class DebugWindow : Window, IDisposable {
         ImGui.Text($"KB W:{ks[VK.W]}, S:{ks[VK.S]}, A:{ks[VK.A]}, D:{ks[VK.D]}.");
         ImGui.Text($"Can Swap (Timeout): {(Plugin.SwapTimeout <= DateTime.Now)}");
 
-#if DEV
+#if DEBUG
         ImGui.Spacing();
         if (ImGui.Button("Testing, Spawn ActionInputDialog")) {
             var wind = new ActionInputDialog(this.plugin);

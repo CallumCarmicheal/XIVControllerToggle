@@ -1,4 +1,5 @@
 ﻿using Dalamud.Interface.Components;
+using Dalamud.Interface.Utility.Raii;
 using Dalamud.Interface.Windowing;
 
 using ImGuiNET;
@@ -94,13 +95,12 @@ namespace XIVControllerToggle.Windows.Generics {
             float topRowHeight = windowSize.Y - bottomRowHeight;
 
             // Top row (dynamically sized, with a scrollbar if content exceeds)
-            ImGui.BeginChild("TopRow", new System.Numerics.Vector2(0, topRowHeight), true, ImGuiWindowFlags.HorizontalScrollbar);
-            {
+            using (ImRaii.Child("TopRow", new Vector2(0, topRowHeight), true, ImGuiWindowFlags.HorizontalScrollbar)) {
                 // Top Row
 
                 // Render the table if there are items
                 if (items.Count > 0) {
-                    if (ImGui.BeginTable("ItemsTable", 2, ImGuiTableFlags.RowBg | ImGuiTableFlags.Borders)) {
+                    using (var table = ImRaii.Table("tblStringEditor", 2, ImGuiTableFlags.RowBg | ImGuiTableFlags.Borders)) {
                         ImGui.TableSetupColumn("Item", ImGuiTableColumnFlags.WidthStretch);
                         ImGui.TableSetupColumn("Actions", ImGuiTableColumnFlags.WidthFixed, 50);
                         ImGui.TableHeadersRow();
@@ -130,16 +130,12 @@ namespace XIVControllerToggle.Windows.Generics {
 
                             ImGui.SameLine();
                         }
-
-                        ImGui.EndTable();
                     }
                 }
             }
-            ImGui.EndChild();
 
             // Bottom row (fixed height)
-            ImGui.BeginChild("BottomRow", new System.Numerics.Vector2(0, bottomRowHeight - 2), true);
-            {
+            using (ImRaii.Child("BottomRow", new Vector2(0, bottomRowHeight - 2), true)) {
                 // Bottom row
 
                 // Text box to add a new item
@@ -153,7 +149,6 @@ namespace XIVControllerToggle.Windows.Generics {
                     }
                 }
             }
-            ImGui.EndChild();
         }
 
         public void Dispose() {

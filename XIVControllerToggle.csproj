@@ -3,7 +3,7 @@
     <PropertyGroup>
         <Authors>Callum Carmicheal</Authors>
         <Company></Company>
-        <Version>1.0.1.4</Version>
+        <Version>1.1</Version>
         <Description>The Great Controller HUD Switcher</Description>
         <Copyright></Copyright>
         <PackageProjectUrl>https://github.com/CallumCarmicheal/XIVControllerToggle</PackageProjectUrl>
@@ -12,4 +12,8 @@
 		<OutputPath>..\Build\XIVControllerToggle\</OutputPath>
 		<TargetFramework>net9.0-windows7.0</TargetFramework>
     </PropertyGroup>
+    <ItemGroup>
+      <Compile Remove="KeyInputTestProgramCore\**" />
+      <EmbeddedResource Remove="KeyInputTestProgramCore\**" />
+    </ItemGroup>
 </Project>
