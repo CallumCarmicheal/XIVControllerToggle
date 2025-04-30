@@ -1,6 +1,8 @@
 using System;
+using System.Collections.Generic;
 using System.Numerics;
 
+using Dalamud.Interface.Components;
 using Dalamud.Interface.Utility.Raii;
 using Dalamud.Interface.Windowing;
 
@@ -10,6 +12,11 @@ namespace XIVControllerToggle.Windows;
 
 public class ConfigWindow : Window, IDisposable {
     private readonly Plugin plugin;
+
+    private bool tempBool = false;
+    private string tempString1 = string.Empty;
+    private string tempString2 = string.Empty;
+    private List<string> tempListString = new List<string>() { "Test1", "Test2", "Test3" };
 
     public ConfigWindow(Plugin plugin) : base (
         "The Great Controller HUD Switcher", ImGuiWindowFlags.AlwaysAutoResize) {
@@ -75,6 +82,30 @@ public class ConfigWindow : Window, IDisposable {
         ImGui.Dummy(new Vector2(0, 5));
 
         if (Plugin.PluginConfig.SwitchHudLayouts == false) ImGui.EndDisabled();
+
+#if (DEV)
+        ImGui.Checkbox("Enable / Disable Dalamud Collections on change", ref tempBool);
+        if (tempBool == false) ImGui.BeginDisabled();
+        {
+            ImGui.Text("Enable collections on change: "); ImGui.SameLine();
+            if (ImGuiComponents.IconButton(Dalamud.Interface.FontAwesomeIcon.PlusCircle)) {
+                plugin.ShowListDialog("Collections to enable", tempListString);
+            }; ImGui.SameLine();
+            ImGui.InputText("##enableCollections", ref tempString1, 4000, ImGuiInputTextFlags.ReadOnly);
+
+            ImGui.Text("Disable collections on change: "); ImGui.SameLine();
+            if (ImGuiComponents.IconButton(Dalamud.Interface.FontAwesomeIcon.PlusCircle)) {
+                plugin.ShowListDialog("Collections to disable", tempListString);
+            }; ImGui.SameLine();
+            ImGui.InputText("##disableCollections", ref tempString2, 4000, ImGuiInputTextFlags.ReadOnly);
+
+            ImGui.Text("Seperate each collection with a comma,\nif you're collection has a comma put a backslash with a comma like this: \\,");
+        }
+        if (tempBool == false) ImGui.EndDisabled();
+
+        if (ImGui.Button("Show Test Editor"))
+            plugin.ShowListDialog("test editor", tempListString);
+#endif
 
         if (ImGui.Button("Show Input Information"))
             plugin.DrawDebugUI();

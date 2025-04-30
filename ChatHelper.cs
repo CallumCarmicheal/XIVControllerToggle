@@ -37,13 +37,13 @@ namespace TPie.Helpers {
         private IntPtr _chatModulePtr;
 
         public static unsafe bool IsInputTextActive() {
-            Framework* framework = Framework.Instance();
+            var framework = Framework.Instance();
             if (framework == null) { return false; }
 
-            UIModule* module = framework->GetUIModule();
+            var module = framework->GetUIModule();
             if (module == null) { return false; }
 
-            RaptureAtkModule* atkModule = module->GetRaptureAtkModule();
+            var atkModule = module->GetRaptureAtkModule();
             if (atkModule == null) { return false; }
 
             return atkModule->AtkModule.IsTextInputActive();

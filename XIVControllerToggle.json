@@ -13,6 +13,6 @@
     "hud",
     "aida"
   ],
-  "DalamudApiLevel": 11,
+  "DalamudApiLevel": 12,
   "IconUrl": "https://raw.githubusercontent.com/CallumCarmicheal/XIVControllerToggle/master/images/icon.png"
 }

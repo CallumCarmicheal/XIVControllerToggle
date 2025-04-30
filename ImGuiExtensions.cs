@@ -1,9 +1,12 @@
+using Dalamud.Interface;
 using Dalamud.Interface.Utility;
-
+using Dalamud.Interface.Utility.Raii;
+using Dalamud.Utility.Numerics;
 using ImGuiNET;
 
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Numerics;
 using System.Text;
@@ -234,5 +237,31 @@ namespace XIVControllerToggle {
             }
         }
         #endregion
+
+        public static bool ImGuiCenteredTableColumnIconButton(string id, FontAwesomeIcon icon) {
+            string iconText = icon.ToIconString();
+            bool result;
+            using (ImRaii.PushFont(UiBuilder.IconFont)) {
+                Vector2 textSize = ImGui.CalcTextSize(iconText);
+                float width = (textSize.X + ImGui.GetStyle().FramePadding.X * 2f);
+                float height = ImGui.GetFrameHeight();
+                Vector2 btnSize = new Vector2(width, height);
+
+                // Handle positing inside the column
+                float columnWidth = ImGui.GetColumnWidth(); // Get column width
+                float offsetX = (columnWidth - btnSize.X) / 2.0f; // Calculate horizontal offset to center the button
+                if (offsetX > 0) // Ensure the offset doesn't cause clipping
+                    ImGui.SetCursorPosX(ImGui.GetCursorPosX() + offsetX);
+                Vector2 cursorScreenPos = ImGui.GetCursorScreenPos();
+
+                using (ImRaii.PushId(iconText)) {
+                    result = ImGui.Button($"##{id}", btnSize);
+                }
+
+                ImGui.GetWindowDrawList().AddText(cursorScreenPos + ((btnSize - textSize) / 2), ImGui.GetColorU32(ImGuiCol.Text), iconText);
+            }
+
+            return result;
+        }
     }
 }

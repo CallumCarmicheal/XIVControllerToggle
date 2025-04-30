@@ -14,6 +14,9 @@ using System;
 
 using VK = Dalamud.Game.ClientState.Keys.VirtualKey;
 using FFXIVClientStructs.FFXIV.Component.GUI;
+using XIVControllerToggle.Windows.Generics;
+using Lumina.Excel.Sheets;
+using System.Collections.Generic;
 
 namespace XIVControllerToggle {
     public sealed class Plugin : IDalamudPlugin {
@@ -25,6 +28,7 @@ namespace XIVControllerToggle {
 
         private ConfigWindow ConfigWindow { get; init; }
         private DebugWindow DebugWindow { get; init; }
+        private ImguiStringListEditor ImguiStringListEditor { get; init; }
 
         private static IDalamudPluginInterface PluginInterface { get; set; } = null!;
         public static ICommandManager CommandManager { get; set; } = null!;
@@ -65,9 +69,11 @@ namespace XIVControllerToggle {
 
             ConfigWindow = new ConfigWindow(this);
             DebugWindow = new DebugWindow(this);
+            ImguiStringListEditor = new ImguiStringListEditor(this);
 
             WindowSystem.AddWindow(ConfigWindow);
             WindowSystem.AddWindow(DebugWindow);
+            WindowSystem.AddWindow(ImguiStringListEditor);
 
             setupAndRemoveCommands(true);
 
@@ -181,6 +187,8 @@ namespace XIVControllerToggle {
 
             ConfigWindow.Dispose();
             DebugWindow.Dispose();
+            ImguiStringListEditor.Dispose();
+
             ChatHelper.Instance?.Dispose();
 
             CommandManager.RemoveHandler(CommandName);
@@ -193,6 +201,10 @@ namespace XIVControllerToggle {
 
         public void DrawConfigUI() => ConfigWindow.IsOpen = true;
         public void DrawDebugUI() => DebugWindow.IsOpen = true;
+
+        public void ShowListDialog(string title, List<string> listItems) {
+            ImguiStringListEditor.SetItemsAndDisplay(title, listItems);
+        }
 
         public static DateTime SwapTimeout = DateTime.Now;
         public bool? PerformControllerKeyboardSwitch(bool? forceSwitchToController = null) {
