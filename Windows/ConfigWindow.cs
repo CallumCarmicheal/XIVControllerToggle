@@ -8,15 +8,18 @@ using Dalamud.Interface.Windowing;
 
 using ImGuiNET;
 
+using XIVControllerToggle.Windows.Generics;
+
 namespace XIVControllerToggle.Windows;
 
 public class ConfigWindow : Window, IDisposable {
     private readonly Plugin plugin;
 
-    private bool tempBool = false;
-    private string tempString1 = string.Empty;
-    private string tempString2 = string.Empty;
-    private List<string> tempListString = new List<string>() { "Test1", "Test2", "Test3" };
+    private string enableCollectionsStringKBM  = string.Empty;
+    private string disableCollectionsStringKBM = string.Empty;
+
+    private string enableCollectionsStringPAD = string.Empty;
+    private string disableCollectionsStringPAD = string.Empty;
 
     public ConfigWindow(Plugin plugin) : base (
         "The Great Controller HUD Switcher", ImGuiWindowFlags.AlwaysAutoResize) {
@@ -83,32 +86,70 @@ public class ConfigWindow : Window, IDisposable {
 
         if (Plugin.PluginConfig.SwitchHudLayouts == false) ImGui.EndDisabled();
 
-#if (DEV)
-        ImGui.Checkbox("Enable / Disable Dalamud Collections on change", ref tempBool);
-        if (tempBool == false) ImGui.BeginDisabled();
-        {
-            ImGui.Text("Enable collections on change: "); ImGui.SameLine();
-            if (ImGuiComponents.IconButton(Dalamud.Interface.FontAwesomeIcon.PlusCircle)) {
-                plugin.ShowListDialog("Collections to enable", tempListString);
-            }; ImGui.SameLine();
-            ImGui.InputText("##enableCollections", ref tempString1, 4000, ImGuiInputTextFlags.ReadOnly);
+        bool enableCollections = Plugin.PluginConfig.EnableCollectionsOnChange;
+        if (ImGui.Checkbox("Enable / Disable Dalamud Collections on change", ref enableCollections)) 
+            Plugin.PluginConfig.EnableCollectionsOnChange = enableCollections;
 
-            ImGui.Text("Disable collections on change: "); ImGui.SameLine();
-            if (ImGuiComponents.IconButton(Dalamud.Interface.FontAwesomeIcon.PlusCircle)) {
-                plugin.ShowListDialog("Collections to disable", tempListString);
-            }; ImGui.SameLine();
-            ImGui.InputText("##disableCollections", ref tempString2, 4000, ImGuiInputTextFlags.ReadOnly);
+        if (Plugin.PluginConfig.EnableCollectionsOnChange == false) ImGui.BeginDisabled();
 
-            ImGui.Text("Seperate each collection with a comma,\nif you're collection has a comma put a backslash with a comma like this: \\,");
+        var tableFlags =
+          ImGuiTableFlags.Resizable              // keep your resizing behaviour
+        | ImGuiTableFlags.NoBordersInBody        // (redundant with NoBorders, but explicit)
+        ;
+
+        if (ImGui.BeginTable("collections_table", 3, tableFlags)) {
+            // Column 0: fixed to maxLabelWidth
+            ImGui.TableSetupColumn("##label", ImGuiTableColumnFlags.WidthStretch);
+
+            // Column 1: stretch
+            ImGui.TableSetupColumn("##field", ImGuiTableColumnFlags.WidthStretch);
+
+            // Column 2: fixed to icon/button width (e.g. 24px)
+            const float iconSize = 24f;
+            ImGui.TableSetupColumn("##button", ImGuiTableColumnFlags.NoResize | ImGuiTableColumnFlags.WidthFixed, iconSize);
+
+            // Render the rows.
+            void DrawRow(string label, string buttonId, ref string field, List<string> list) {
+                ImGui.TableNextRow();
+
+                // Column 0: label
+                ImGui.TableSetColumnIndex(0);
+                ImGui.Text(label);
+
+                // Column 2: text field
+                ImGui.TableSetColumnIndex(1);
+                ImGui.PushItemWidth(-1); // take all remaining width
+                ImGui.InputText($"##{buttonId}_field", ref field, 4000, ImGuiInputTextFlags.ReadOnly);
+                ImGui.PopItemWidth();
+
+                // Column 2: button
+                ImGui.TableSetColumnIndex(2);
+                if (ImGuiComponents.IconButton(buttonId, Dalamud.Interface.FontAwesomeIcon.PlusCircle))
+                    plugin.ShowListDialog(label, list, cbCollectionsChanged);
+            }
+
+            DrawRow("(KBM) Enable collections",  "enablecolkbm",  ref enableCollectionsStringKBM,  Plugin.PluginConfig.CollectionsToEnableKBM);
+            DrawRow("(KBM) Disable collections", "disablecolkbm", ref disableCollectionsStringKBM, Plugin.PluginConfig.CollectionsToDisableKBM);
+            DrawRow("(PAD) Enable collections",  "enablecolpad",  ref enableCollectionsStringPAD,  Plugin.PluginConfig.CollectionsToEnablePAD);
+            DrawRow("(PAD) Disable collections", "disablecolpad", ref disableCollectionsStringPAD, Plugin.PluginConfig.CollectionsToDisablePAD);
+
+            ImGui.EndTable();
         }
-        if (tempBool == false) ImGui.EndDisabled();
 
-        if (ImGui.Button("Show Test Editor"))
-            plugin.ShowListDialog("test editor", tempListString);
-#endif
+        if (Plugin.PluginConfig.EnableCollectionsOnChange == false) ImGui.EndDisabled();
 
         if (ImGui.Button("Show Input Information"))
             plugin.DrawDebugUI();
 
+    }
+
+    private void cbCollectionsChanged(ImguiStringListEditor sender, StringListChangedEventArgs eventArgs) {
+        // Update the collections text
+        enableCollectionsStringKBM  = string.Join(", ", Plugin.PluginConfig.CollectionsToEnableKBM);
+        disableCollectionsStringKBM = string.Join(", ", Plugin.PluginConfig.CollectionsToDisableKBM);
+        enableCollectionsStringPAD = string.Join(", ", Plugin.PluginConfig.CollectionsToEnablePAD);
+        disableCollectionsStringPAD = string.Join(", ", Plugin.PluginConfig.CollectionsToDisablePAD);
+
+        Plugin.PluginConfig.Save();
     }
 }

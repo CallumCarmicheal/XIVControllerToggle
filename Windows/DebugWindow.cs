@@ -61,6 +61,10 @@ public class DebugWindow : Window, IDisposable {
             ChatHelper.SendChatMessage("/hudlayout 3");
         if (ImGui.Button("Set Hud 4"))
             ChatHelper.SendChatMessage("/hudlayout 4");
+        if (ImGui.Button("Disable collection: FPS"))
+            ChatHelper.SendChatMessage("/xldisablecollection FPS");
+        if (ImGui.Button("Enable collection: FPS"))
+            ChatHelper.SendChatMessage("/xlenablecollection FPS");
 
         ImGui.Text($"LEFT - X: {gp.LeftStick.X.abs()}, Y: {gp.LeftStick.Y.abs()}.");
         ImGui.Text($"RIGHT - X: {gp.RightStick.X.abs()}, Y: {gp.RightStick.Y.abs()}.");

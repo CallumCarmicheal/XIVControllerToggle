@@ -23,9 +23,9 @@ namespace XIVControllerToggle.Windows.Generics {
         public List<string> Items { get; set; } = new List<string>();
         public int UpdatedIndex { get; internal set; }
     }
-    internal delegate void DImguiStringListChanged(ImguiStringListEditor sender, StringListChangedEventArgs eventArgs);
+    public delegate void DImguiStringListChanged(ImguiStringListEditor sender, StringListChangedEventArgs eventArgs);
 
-    internal class ImguiStringListEditor : Window, IDisposable {
+    public class ImguiStringListEditor : Window, IDisposable {
         private List<string> items = new List<string>();
         private string newItem = string.Empty;
 

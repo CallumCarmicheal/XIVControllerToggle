@@ -202,8 +202,12 @@ namespace XIVControllerToggle {
         public void DrawConfigUI() => ConfigWindow.IsOpen = true;
         public void DrawDebugUI() => DebugWindow.IsOpen = true;
 
-        public void ShowListDialog(string title, List<string> listItems) {
+        public void ShowListDialog(string title, List<string> listItems, DImguiStringListChanged? callback = null) {
             ImguiStringListEditor.SetItemsAndDisplay(title, listItems);
+
+            if (callback != null) {
+                ImguiStringListEditor.ListChanged += callback;
+            }
         }
 
         public static DateTime SwapTimeout = DateTime.Now;
@@ -230,6 +234,24 @@ namespace XIVControllerToggle {
                 int hudLayout = currentlyPadMode ? PluginConfig.HudSwitchController : PluginConfig.HudSwitchMKB;
                 string rawCmd = $"/hudlayout {hudLayout}";
                 ChatHelper.SendChatMessage(rawCmd);
+            }
+
+            if (PluginConfig.EnableCollectionsOnChange) {
+                if (currentlyPadMode) {
+                    foreach (var col in PluginConfig.CollectionsToDisablePAD) {
+                        CommandManager.ProcessCommand($"/xldisablecollection {col}");
+                    }
+                    foreach (var col in PluginConfig.CollectionsToEnablePAD) {
+                        CommandManager.ProcessCommand($"/xlenablecollection {col}");
+                    }
+                } else {
+                    foreach (var col in PluginConfig.CollectionsToDisableKBM) {
+                        CommandManager.ProcessCommand($"/xldisablecollection {col}");
+                    }
+                    foreach (var col in PluginConfig.CollectionsToEnableKBM) {
+                        CommandManager.ProcessCommand($"/xlenablecollection {col}");
+                    }
+                }
             }
 
             SwapTimeout = DateTime.Now.AddSeconds(1);

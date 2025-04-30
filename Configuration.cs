@@ -22,6 +22,14 @@ namespace XIVControllerToggle {
         public bool HudSwitchPad_HideChat { get; set; } = false;
         public bool HudSwitchMKB_HideChat { get; set; } = false;
 
+        public bool EnableCollectionsOnChange { get; set; } = false;
+        public List<string> CollectionsToEnableKBM { get; set; } = new List<string>();
+        public List<string> CollectionsToDisableKBM { get; set; } = new List<string>();
+        public List<string> CollectionsToEnablePAD { get; set; } = new List<string>();
+        public List<string> CollectionsToDisablePAD { get; set; } = new List<string>();
+
+
+
         public int ConfigurationType { get; set; } = 0;
 
         // New Controller UI (WIP)
