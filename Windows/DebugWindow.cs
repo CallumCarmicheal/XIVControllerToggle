@@ -1,21 +1,12 @@
-using System;
-using System.Numerics;
-
 using Dalamud.Game.Config;
-using Dalamud.Interface.Internal;
 using Dalamud.Interface.Windowing;
-using Dalamud.Logging;
-using Dalamud.Plugin.Services;
-
-using FFXIVClientStructs.Attributes;
-using FFXIVClientStructs.FFXIV.Client.Game.Character;
-using FFXIVClientStructs.FFXIV.Component.GUI;
 
 using ImGuiNET;
 
-using TPie.Helpers;
+using System;
+using System.Numerics;
 
-using XIVControllerToggle;
+using TPie.Helpers;
 
 using VK = Dalamud.Game.ClientState.Keys.VirtualKey;
 

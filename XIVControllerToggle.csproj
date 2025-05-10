@@ -3,7 +3,7 @@
     <PropertyGroup>
         <Authors>Callum Carmicheal</Authors>
         <Company></Company>
-        <Version>1.1</Version>
+        <Version>1.2</Version>
         <Description>The Great Controller HUD Switcher</Description>
         <Copyright></Copyright>
         <PackageProjectUrl>https://github.com/CallumCarmicheal/XIVControllerToggle</PackageProjectUrl>

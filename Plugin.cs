@@ -1,22 +1,19 @@
-using Dalamud.Game.Command;
-using Dalamud.IoC;
-using Dalamud.Plugin;
-using System.IO;
-using Dalamud.Interface.Windowing;
-using Dalamud.Plugin.Services;
-using XIVControllerToggle.Windows;
-using FFXIVClientStructs.FFXIV.Client.Game.Fate;
-using FFXIVClientStructs.FFXIV.Client.System.Framework;
-using Dalamud.Game.Config;
 using Dalamud.Game;
-using TPie.Helpers;
+using Dalamud.Game.Command;
+using Dalamud.Game.Config;
+using Dalamud.Interface.Windowing;
+using Dalamud.Plugin;
+using Dalamud.Plugin.Services;
+
 using System;
+using System.Collections.Generic;
+
+using TPie.Helpers;
+
+using XIVControllerToggle.Windows;
+using XIVControllerToggle.Windows.Generics;
 
 using VK = Dalamud.Game.ClientState.Keys.VirtualKey;
-using FFXIVClientStructs.FFXIV.Component.GUI;
-using XIVControllerToggle.Windows.Generics;
-using Lumina.Excel.Sheets;
-using System.Collections.Generic;
 
 namespace XIVControllerToggle {
     public sealed class Plugin : IDalamudPlugin {

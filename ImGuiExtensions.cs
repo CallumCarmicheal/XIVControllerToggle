@@ -1,16 +1,10 @@
 using Dalamud.Interface;
-using Dalamud.Interface.Utility;
 using Dalamud.Interface.Utility.Raii;
-using Dalamud.Utility.Numerics;
+
 using ImGuiNET;
 
 using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
 using System.Numerics;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace XIVControllerToggle {
     public static class ImGuiExtensions {

@@ -1,16 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Numerics;
-using System.Reflection.Emit;
-
-using Dalamud.Game.ClientState.GamePad;
+﻿using Dalamud.Game.ClientState.GamePad;
 using Dalamud.Game.ClientState.Keys;
 using Dalamud.Interface;
 using Dalamud.Interface.Components;
 using Dalamud.Interface.Utility;
 using Dalamud.Interface.Utility.Raii;
 using Dalamud.Interface.Windowing;
+
 using ImGuiNET;
+
+using System;
+using System.Collections.Generic;
+using System.Numerics;
 
 using ImGExt = XIVControllerToggle.ImGuiExtensions;
 

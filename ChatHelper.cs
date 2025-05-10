@@ -1,8 +1,9 @@
 using FFXIVClientStructs.FFXIV.Client.System.Framework;
-using FFXIVClientStructs.FFXIV.Client.UI;
+
 using System;
 using System.Runtime.InteropServices;
 using System.Text;
+
 using XIVControllerToggle;
 
 namespace TPie.Helpers {
