@@ -38,14 +38,16 @@ public class ConfigWindow : Window, IDisposable {
         ImGuiExtensions.ImguiCheckbox("Enable KB / Pad Switching on movement", () => Plugin.PluginConfig.Enabled, (v) => Plugin.PluginConfig.Enabled = v);
 
         ImGui.Text("Switch to Pad Crossbars on: "); ImGui.SameLine();
-        ImGuiExtensions.ImguiRadioButton("LS", "SPCB", () => Plugin.PluginConfig.ControllerSticks == ControllerSticks.LS, () => Plugin.PluginConfig.ControllerSticks = ControllerSticks.LS, sameLine: true);
-        ImGuiExtensions.ImguiRadioButton("RS", "SPCB", () => Plugin.PluginConfig.ControllerSticks == ControllerSticks.RS, () => Plugin.PluginConfig.ControllerSticks = ControllerSticks.RS, sameLine: true);
+        ImGuiExtensions.ImguiRadioButton("LS",   "SPCB", () => Plugin.PluginConfig.ControllerSticks == ControllerSticks.LS,   () => Plugin.PluginConfig.ControllerSticks = ControllerSticks.LS, sameLine: true);
+        ImGuiExtensions.ImguiRadioButton("RS",   "SPCB", () => Plugin.PluginConfig.ControllerSticks == ControllerSticks.RS,   () => Plugin.PluginConfig.ControllerSticks = ControllerSticks.RS, sameLine: true);
         ImGuiExtensions.ImguiRadioButton("Both", "SPCB", () => Plugin.PluginConfig.ControllerSticks == ControllerSticks.Both, () => Plugin.PluginConfig.ControllerSticks = ControllerSticks.Both, sameLine: false);
 
         int stickDeadzone = Plugin.PluginConfig.StickDeadzone;
         ImGui.Text("Stick: Switching threashold"); ImGui.SameLine();
-        if (ImGui.DragInt("##StickDeadzone", ref stickDeadzone, 1, 1, 100))
+        if (ImGui.DragInt("##StickDeadzone", ref stickDeadzone, 1, 1, 100)) {
             Plugin.PluginConfig.StickDeadzone = stickDeadzone;
+            Plugin.PluginConfig.Save();
+        }
 
         ImGuiExtensions.ImguiCheckbox("Enable HUD Layout Changing", () => Plugin.PluginConfig.SwitchHudLayouts, (v) => Plugin.PluginConfig.SwitchHudLayouts = v);
 
@@ -82,7 +84,7 @@ public class ConfigWindow : Window, IDisposable {
         ImGui.Dummy(new Vector2(0, 5));
 
         ImGuiExtensions.ImguiCheckbox("Change High Resolution UI Scaling", 
-            () => Plugin.PluginConfig.HudScaling_Enabled, 
+            ()  => Plugin.PluginConfig.HudScaling_Enabled, 
             (v) => Plugin.PluginConfig.HudScaling_Enabled = v);
 
         using (ImGuiExtensions.DisabledIf(!Plugin.PluginConfig.HudScaling_Enabled)) {
@@ -94,12 +96,16 @@ public class ConfigWindow : Window, IDisposable {
             };
 
             int HudScaling_KBMMode = (int)Plugin.PluginConfig.HudScaling_KBMMode;
-            if (ImGui.Combo("Scaling on KBM:", ref HudScaling_KBMMode, dropdown, 4))
+            if (ImGui.Combo("Scaling on KBM", ref HudScaling_KBMMode, dropdown, 4)) {
                 Plugin.PluginConfig.HudScaling_KBMMode = (uint)HudScaling_KBMMode;
+                Plugin.PluginConfig.Save();
+            }
 
             int HudScaling_PadMode = (int)Plugin.PluginConfig.HudScaling_PadMode;
-            if (ImGui.Combo("Scaling on Pad:", ref HudScaling_PadMode, dropdown, 4))
+            if (ImGui.Combo("Scaling on Pad", ref HudScaling_PadMode, dropdown, 4)) {
                 Plugin.PluginConfig.HudScaling_PadMode = (uint)HudScaling_PadMode;
+                Plugin.PluginConfig.Save();
+            }
         }
 
         ImGui.Dummy(new Vector2(0, 5));
@@ -107,8 +113,10 @@ public class ConfigWindow : Window, IDisposable {
         ImGui.Dummy(new Vector2(0, 5));
 
         bool enableCollections = Plugin.PluginConfig.EnableCollectionsOnChange;
-        if (ImGui.Checkbox("Enable / Disable Dalamud Collections on change", ref enableCollections)) 
+        if (ImGui.Checkbox("Enable / Disable Dalamud Collections on change", ref enableCollections)) {
             Plugin.PluginConfig.EnableCollectionsOnChange = enableCollections;
+            Plugin.PluginConfig.Save();
+        }
 
         if (Plugin.PluginConfig.EnableCollectionsOnChange == false) ImGui.BeginDisabled();
 
@@ -160,14 +168,13 @@ public class ConfigWindow : Window, IDisposable {
 
         if (ImGui.Button("Show Input Information"))
             plugin.DrawDebugUI();
-
     }
 
     private void cbCollectionsChanged(ImguiStringListEditor sender, StringListChangedEventArgs eventArgs) {
         // Update the collections text
         enableCollectionsStringKBM  = string.Join(", ", Plugin.PluginConfig.CollectionsToEnableKBM);
         disableCollectionsStringKBM = string.Join(", ", Plugin.PluginConfig.CollectionsToDisableKBM);
-        enableCollectionsStringPAD = string.Join(", ", Plugin.PluginConfig.CollectionsToEnablePAD);
+        enableCollectionsStringPAD  = string.Join(", ", Plugin.PluginConfig.CollectionsToEnablePAD);
         disableCollectionsStringPAD = string.Join(", ", Plugin.PluginConfig.CollectionsToDisablePAD);
 
         Plugin.PluginConfig.Save();
