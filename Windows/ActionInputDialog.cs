@@ -5,8 +5,7 @@ using Dalamud.Interface.Components;
 using Dalamud.Interface.Utility;
 using Dalamud.Interface.Utility.Raii;
 using Dalamud.Interface.Windowing;
-
-using ImGuiNET;
+using Dalamud.Bindings.ImGui;
 
 using System;
 using System.Collections.Generic;
@@ -19,7 +18,6 @@ namespace XIVControllerToggle.Windows;
 #if DEBUG
 internal class ActionInputDialog : Window, IDisposable {
     private readonly Plugin plugin;
-    private int selectedActionIdx = 0;
 
     private bool capturingKeys = false;
 
