@@ -1,9 +1,13 @@
+using Dalamud.Bindings.ImGui;
 using Dalamud.Game;
 using Dalamud.Game.Command;
 using Dalamud.Game.Config;
 using Dalamud.Interface.Windowing;
 using Dalamud.Plugin;
 using Dalamud.Plugin.Services;
+
+using FFXIVClientStructs.FFXIV.Client.System.Input;
+using FFXIVClientStructs.FFXIV.Client.UI;
 
 using System;
 using System.Collections.Generic;
@@ -123,13 +127,68 @@ namespace XIVControllerToggle {
         }
 
         private DateTime controllerProcessDelay = DateTime.Now;
+
+        private unsafe bool IsInputActive() {
+            // 1. Check ImGui (Dalamud Plugins)
+            if (ImGui.GetIO().WantCaptureKeyboard) return true;
+
+            // 2. Check Game Chat / Search Bars (The "Native" way)
+            var uiModule = UIModule.Instance();
+            if (uiModule == null) return false;
+
+            var raptureAtkModule = uiModule->GetRaptureAtkModule();
+            if (raptureAtkModule == null) return false;
+
+            // This covers Chat, Party Finder search, Market Board search, etc
+            return raptureAtkModule->AtkModule.IsTextInputActive();
+        }
+
+        private unsafe bool IsKeyboardMovement() {
+            // Do nothing if the user has a text input highlighted
+            if (IsInputActive()) return false;
+
+            var ks = KeyState;
+            var uiInput = UIInputData.Instance();
+
+            // Get basic movement keys regardless of what they are set to
+            // Could be customised further in a settings window by storing this elsewhere and adding or removing these based on user settings
+            InputId[] movementIds = {
+                InputId.MOVE_FORE,
+                InputId.MOVE_BACK,
+                InputId.MOVE_LEFT,
+                InputId.MOVE_RIGHT,
+                InputId.MOVE_STRIFE_L,
+                InputId.MOVE_STRIFE_R
+            };
+
+            // Check if any of them are currently pressed
+            foreach (var moveId in movementIds) {
+                Span<KeySetting> binds = uiInput->GetKeybind(moveId)->KeySettings;
+
+                // Check both primary and secondary bindings for each input
+                foreach (var bind in binds) {
+                    // Skip if input invalid or not bound
+                    if (!ks.IsVirtualKeyValid((VK)(int)bind.Key) || (bind.Key == 0)) {
+                        continue;
+                    }
+
+                    // True if key pressed and modifier (if bound) pressed
+                    if (ks[(VK)(int)bind.Key] && (bind.KeyModifier == 0 || ks[(VK)(int)bind.KeyModifier])) {
+                        return true;
+                    }
+                }
+            }
+            // No matches
+            return false;
+        }
+
         private void Update_ProcessKeypresses() {
             // Run every 250ms
             if (DateTime.Now < controllerProcessDelay) return;
             if (PluginConfig.Enabled == false) return; // Dont run if disabled
 
             var gs = GamepadState;
-            var ks = KeyState;
+            
 
             GameConfig.TryGet(UiConfigOption.PadMode, out uint padMode_i);
             bool currentlyPadMode = padMode_i == 1;
@@ -145,10 +204,7 @@ namespace XIVControllerToggle {
 
             bool swap = false;
             if (currentlyPadMode) {
-                // If ALT is not being pressed and (wasd) being pressed with the chat not being active
-                if (ks[VK.MENU] == false && (ks[VK.W] || ks[VK.S] || ks[VK.A] || ks[VK.D]) && !ChatHelper.IsInputTextActive()) {
-                    swap = true;
-                }
+                swap = IsKeyboardMovement();
             } else {
                 // Our deadzone modifier is 25
                 if (max >= PluginConfig.StickDeadzone) {
