@@ -10,6 +10,11 @@ namespace XIVControllerToggle {
     public class Configuration : IPluginConfiguration {
         public int Version { get; set; } = 1;
 
+
+        public string PluginVersion { get; set; } = string.Empty;
+        public bool ShowChangelogOnVersionChange { get; set; } = true; // Default to true
+
+
         public bool Enabled { get; set; } = true;
         public bool SwitchHudLayouts { get; set; } = true;
 

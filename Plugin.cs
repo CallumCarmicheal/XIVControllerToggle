@@ -11,6 +11,7 @@ using FFXIVClientStructs.FFXIV.Client.UI;
 
 using System;
 using System.Collections.Generic;
+using System.Reflection;
 
 using TPie.Helpers;
 
@@ -30,6 +31,7 @@ namespace XIVControllerToggle {
         private ConfigWindow ConfigWindow { get; init; }
         private DebugWindow DebugWindow { get; init; }
         private ImguiStringListEditor ImguiStringListEditor { get; init; }
+        private ChangelogWindow ChangelogWindow { get; init; }
         
         private static IDalamudPluginInterface PluginInterface { get; set; } = null!;
         public static ICommandManager CommandManager { get; set; } = null!;
@@ -62,27 +64,41 @@ namespace XIVControllerToggle {
             SigScanner = sigScanner;
             GamepadState = gamepadState;
 
-            // Log.Info("Startup!");
-
             PluginConfig = PluginInterface.GetPluginConfig() as Configuration ?? new Configuration();
             PluginConfig.Initialize(PluginInterface, this);
             PluginConfig.ClampValues();
 
+            var currentVersion = PluginInterface.GetPlugin(Assembly.GetExecutingAssembly())!.Version.ToString();
+            //Log.Info("XIVController version: {0}, config plugin version: {1}", currentVersion, PluginConfig.PluginVersion);
+            //Log.Info("XIVController ShowChangelogOnVersionChange: {0}", PluginConfig.ShowChangelogOnVersionChange);
+
             ConfigWindow = new ConfigWindow(this);
             DebugWindow = new DebugWindow(this);
             ImguiStringListEditor = new ImguiStringListEditor(this);
+            ChangelogWindow = new ChangelogWindow(currentVersion);
 
             WindowSystem.AddWindow(ConfigWindow);
             WindowSystem.AddWindow(DebugWindow);
             WindowSystem.AddWindow(ImguiStringListEditor);
+            WindowSystem.AddWindow(ChangelogWindow);
 
             setupAndRemoveCommands(true);
 
             Framework.Update += Update;
             PluginInterface.UiBuilder.Draw += DrawUI;
+            PluginInterface.UiBuilder.OpenMainUi += DrawConfigUI;
             PluginInterface.UiBuilder.OpenConfigUi += DrawConfigUI;
 
             ChatHelper.Initialize();
+
+            // Check the changelog
+            if (PluginConfig.ShowChangelogOnVersionChange && PluginConfig.PluginVersion != currentVersion) {
+                PluginConfig.PluginVersion = currentVersion;
+                PluginConfig.Save();
+                Log.Info("Updated plugin config version to latest version.");
+
+                ChangelogWindow.IsOpen = true;
+            }
         }
         
         private void setupAndRemoveCommands(bool add) {
@@ -237,10 +253,12 @@ namespace XIVControllerToggle {
             Framework.Update -= Update;
             PluginInterface.UiBuilder.Draw -= DrawUI;
             PluginInterface.UiBuilder.OpenConfigUi -= DrawConfigUI;
+            PluginInterface.UiBuilder.OpenMainUi -= DrawConfigUI;
 
             ConfigWindow.Dispose();
             DebugWindow.Dispose();
             ImguiStringListEditor.Dispose();
+            ChangelogWindow.Dispose();
 
             ChatHelper.Instance?.Dispose();
 
@@ -254,6 +272,7 @@ namespace XIVControllerToggle {
 
         public void DrawConfigUI() => ConfigWindow.IsOpen = true;
         public void DrawDebugUI() => DebugWindow.IsOpen = true;
+        internal void DrawChangelogUI() => ChangelogWindow.IsOpen = true;
 
         public void ShowListDialog(string title, List<string> listItems, DImguiStringListChanged? callback = null) {
             ImguiStringListEditor.SetItemsAndDisplay(title, listItems);
@@ -319,5 +338,6 @@ namespace XIVControllerToggle {
 
             return currentlyPadMode;
         }
+
     }
 }

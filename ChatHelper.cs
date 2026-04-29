@@ -8,7 +8,7 @@ using XIVControllerToggle;
 
 namespace TPie.Helpers {
     internal unsafe class ChatHelper : IDisposable {
-        #region Singleton
+    #region Singleton
         private ChatHelper() {
             _chatModulePtr = Plugin.SigScanner.ScanText("48 89 5C 24 ?? 48 89 74 24 ?? 57 48 83 EC ?? 48 8B F2 48 8B F9 45 84 C9");
         }
@@ -33,7 +33,7 @@ namespace TPie.Helpers {
 
             Instance = null!;
         }
-        #endregion
+    #endregion
 
         private IntPtr _chatModulePtr;
 

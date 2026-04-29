@@ -167,6 +167,11 @@ public class ConfigWindow : Window, IDisposable {
 
         if (ImGui.Button("Show Input Information"))
             plugin.DrawDebugUI();
+
+        ImGui.SameLine();
+
+        if (ImGui.Button("Show Changelog"))
+            plugin.DrawChangelogUI();
     }
 
     private void cbCollectionsChanged(ImguiStringListEditor sender, StringListChangedEventArgs eventArgs) {
