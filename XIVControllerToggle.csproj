@@ -15,6 +15,6 @@
       <EmbeddedResource Remove="KeyInputTestProgramCore\**" />
     </ItemGroup>
     <ItemGroup>
-      <PackageReference Update="DalamudPackager" Version="14.0.2" />
+      <PackageReference Update="DalamudPackager" Version="15.0.0" />
     </ItemGroup>
 </Project>
